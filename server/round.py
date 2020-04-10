@@ -19,6 +19,7 @@ class Round(object):
         self.player_drawing = player_drawing
         self.player_guessed = []
         self.skips = 0
+        self.game = game
         self.player_scores = {player: 0 for player in players}
         self.time = 75
         self.chat = Chat(self)
@@ -84,6 +85,6 @@ class Round(object):
             self.end_round("Player drawing quit the game")
             
     def end_round(self, msg):
-        # TODO: implement end round logic later
+        self.game.round_ended()
         pass
         

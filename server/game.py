@@ -3,13 +3,15 @@ represents a full game and handles operations related to games and connections/i
 between player, chat, board, round
 """
 
+import random
 from player import Player
 from board import Board
 from round import Round
 from mimetypes import guess
+from __builtin__ import staticmethod
 
 class Game(object):
-    def __init__(self, id, players, thread):
+    def __init__(self, id, players):
         """
         init the game once player threshold is met
         :param id: int
@@ -20,7 +22,6 @@ class Game(object):
         self.words_used = []
         self.round = None
         self.board = Board()
-        self.connected_thread = thread
         self.player_draw_ind = 0
         self._start_new_round()
         self._create_board()
@@ -29,7 +30,9 @@ class Game(object):
         """
         starts a new round with a new word
         """
-        self.round = Round(self.get_word(), self.players[self.player_draw_ind], self.players, self)
+        round_word = self.get_word()
+        self.words_used.append(round_word)
+        self.round = Round(round_word, self.players[self.player_draw_ind], self.players, self)
         self.player_draw_ind += 1
         
         if self.player_draw_ind >= len(self.players):
@@ -49,7 +52,19 @@ class Game(object):
         :param player Player
         :raises Exception()
         """
-        pass
+        if player in self.players:
+            player_index = self.players.index(player)
+            if player_index > self.player_draw_ind:
+                self.player_draw_ind -= 1
+            
+            self.players.remove(player)
+            self.round.player_left(player)
+            
+        else:
+            raise Exception("Player not in game")
+        
+        if len(self.players) <= 3:
+            self.end_game()
     
     def skip(self):
         """
@@ -81,7 +96,8 @@ class Game(object):
         """
         ends the game
         """
-        # todo: implement the end gme
+        for player in self.players:
+            self.round.player_left(player)
         pass
     
     def get_word(self):
@@ -89,5 +105,12 @@ class Game(object):
         returns a word that has not yet been used in the current game
         :return str
         """
-        # TODO: get a list of words from somewhere
-        pass
+        with open("words.txt", "r") as f:
+            words = []
+            
+            for line in f:
+                single_word = line.strip()
+                if single_word not in self.words_used:
+                    words.append(single_word)
+            r = random.randint(0, len(words)-1)
+            return words[r].strip()

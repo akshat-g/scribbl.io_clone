@@ -36,7 +36,7 @@ class Player(object):
         """
         disconnects the player from the game
         """
-        pass
+        self.game.player_disconnected(self)
     
     def get_score(self):
         return self.score
