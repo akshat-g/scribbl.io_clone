@@ -4,7 +4,6 @@ represents a single round of the game
 import time as timer
 from _thread import *
 
-from game import Game
 from chat import Chat
 
 class Round(object):
@@ -85,6 +84,8 @@ class Round(object):
             self.end_round("Player drawing quit the game")
             
     def end_round(self, msg):
+        for player in self.players:
+            player.update_score(self.player_scores[player])
         self.game.round_ended()
-        pass
+        
         

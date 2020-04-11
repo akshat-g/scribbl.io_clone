@@ -2,8 +2,6 @@
 represents and stores information about chat
 """
 
-from round import Round
-
 class Chat(object):
     def __init__(self, round):
         self.content = []

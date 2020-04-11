@@ -7,8 +7,6 @@ import random
 from player import Player
 from board import Board
 from round import Round
-from mimetypes import guess
-from __builtin__ import staticmethod
 
 class Game(object):
     def __init__(self, id, players):
@@ -23,6 +21,7 @@ class Game(object):
         self.round = None
         self.board = Board()
         self.player_draw_ind = 0
+        self.round_count = 1
         self._start_new_round()
         self._create_board()
         
@@ -34,6 +33,7 @@ class Game(object):
         self.words_used.append(round_word)
         self.round = Round(round_word, self.players[self.player_draw_ind], self.players, self)
         self.player_draw_ind += 1
+        self.round_count += 1
         
         if self.player_draw_ind >= len(self.players):
             self.round.end_round()
@@ -114,3 +114,11 @@ class Game(object):
                     words.append(single_word)
             r = random.randint(0, len(words)-1)
             return words[r].strip()
+        
+    def get_player_scores(self):
+        """
+        returns a dictionary of player scores
+        :return dict
+        """
+        scores = {player:player.get_score() for player in self.players}
+        return scores

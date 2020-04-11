@@ -4,7 +4,6 @@ Each player will represent one connection; hence ip is the property of the playe
 """
 
 from constants import INITIAL_PLAYER_SCORE
-from game import Game
 
 class Player(object):
     def __init__(self, ip, name):
