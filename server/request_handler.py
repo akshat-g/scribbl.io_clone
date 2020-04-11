@@ -27,8 +27,41 @@ class Server(object):
                 # receive request
                 data = conn.recv(1024)
                 data = json.loads(data)
+                
+                keys = [key for key in data.keys()]
+                send_msg = {key:[] for key in keys}
+                
+                for key in keys:
+                    if key == -1: # get game
+                        pass
+                    elif key == 0: # guess
+                        pass
+                    elif key == 1: # skip
+                        pass
+                    elif key == 2: # get chat
+                        pass
+                    elif key == 3: # get board
+                        pass
+                    elif key == 4: # get score
+                        pass
+                    elif key == 5: # get round
+                        pass
+                    elif key == 6: # get word
+                        pass
+                    elif key == 7: # get skips
+                        pass
+                    elif key == 8: # update board
+                        pass
+                    elif key == 9: # get round time
+                        pass
+                    else:
+                        raise Exception("Not a valid key")    
+                
+                conn.sendall(json.dumps(send_msg))
             except Exception as e:
                 print ("[EXCEPTION]:" + player.get_name() +  "disconnected!! ", e)
+                conn.close()
+                # todo: call player disconnect method
                 
     
     def handle_queue(self, player):
