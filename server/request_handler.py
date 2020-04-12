@@ -25,10 +25,14 @@ class Server(object):
         while True:
             try:
                 # receive request
-                data = conn.recv(1024)
-                data = json.loads(data)
+                try:
+                    data = conn.recv(1024)
+                    data = json.loads(data)
+                    print("[LOG] Received data:", data)
+                except Exception as e:
+                    break
                 
-                keys = [key for key in data.keys()]
+                keys = [int(key) for key in data.keys()]
                 send_msg = {key:[] for key in keys}
                 
                 for key in keys:
@@ -82,7 +86,9 @@ class Server(object):
                         else:
                             raise Exception("Not a valid key")    
                 
-                conn.sendall(json.dumps(send_msg))
+                send_msg = json.dumps(send_msg)
+                conn.sendall(send_msg.encode())
+            
             except Exception as e:
                 print ("[EXCEPTION]:" + player.get_name() +  "disconnected!! ", e)
                 conn.close()
@@ -96,7 +102,7 @@ class Server(object):
         self.connection_queue.append(player)
         
         if len(self.connection_queue) > self.PLAYERS:
-            game = Game(self.connection_queue[:], self.game_id)
+            game = Game(self.game_id, self.connection_queue[:])
             
             for p in self.connection_queue:
                 p.set_game(game)

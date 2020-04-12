@@ -32,12 +32,13 @@ class Game(object):
         round_word = self.get_word()
         self.words_used.append(round_word)
         self.round = Round(round_word, self.players[self.player_draw_ind], self.players, self)
-        self.player_draw_ind += 1
         self.round_count += 1
         
         if self.player_draw_ind >= len(self.players):
             self.round.end_round()
             self.end_game()
+            
+        self.player_draw_ind += 1
         
         
     def player_guess(self, player, guessed_word):
@@ -98,7 +99,6 @@ class Game(object):
         """
         for player in self.players:
             self.round.player_left(player)
-        pass
     
     def get_word(self):
         """

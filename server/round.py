@@ -19,6 +19,7 @@ class Round(object):
         self.player_guessed = []
         self.skips = 0
         self.game = game
+        self.players = players
         self.player_scores = {player: 0 for player in players}
         self.time = 75
         self.chat = Chat(self)
@@ -65,8 +66,9 @@ class Round(object):
         correct = (guessed_word == self.word)
         if correct:
             self.player_guessed.append(player)
-            
-            # TODO: implement scoring system here later
+            return True
+        
+        return False
     
     def player_left(self, player):
         """
